@@ -13,11 +13,11 @@
         android:padding="24dp"
         android:gravity="center_horizontal">
 
-        <!-- æ¨é¡ -->
+        <!-- Ã¦Â¨ÂÃ©Â¡Â -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="â¡ PROJECT CYBER-NAVI"
+            android:text="Ã¢ÂÂ¡ PROJECT CYBER-NAVI"
             android:textColor="#00D4FF"
             android:textSize="22sp"
             android:textStyle="bold"
@@ -28,12 +28,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="é·é AI é èªå¡"
+            android:text="Ã©ÂÂ·Ã©ÂÂ AI Ã©Â ÂÃ¨ÂÂªÃ¥ÂÂ¡"
             android:textColor="#88AABB"
             android:textSize="14sp"
             android:layout_marginBottom="32dp" />
 
-        <!-- æ´é«çæå¡ç -->
+        <!-- Ã¦ÂÂ´Ã©Â«ÂÃ§ÂÂÃ¦ÂÂÃ¥ÂÂ¡Ã§ÂÂ -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                     android:id="@+id/tvStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="æª¢æ¥ä¸­..."
+                    android:text="Ã¦ÂªÂ¢Ã¦ÂÂ¥Ã¤Â¸Â­..."
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -64,7 +64,7 @@
                     android:id="@+id/btnStartThunder"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:text="â¡ ååé·é"
+                    android:text="Ã¢ÂÂ¡ Ã¥ÂÂÃ¥ÂÂÃ©ÂÂ·Ã©ÂÂ"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:backgroundTint="#0078D4"
@@ -74,14 +74,14 @@
                     android:id="@+id/btnStopThunder"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="ð¤ è®é·éä¼ç "
+                    android:text="Ã°ÂÂÂ¤ Ã¨Â®ÂÃ©ÂÂ·Ã©ÂÂÃ¤Â¼ÂÃ§ÂÂ "
                     android:textColor="#CCCCCC"
                     android:textSize="14sp"
                     android:backgroundTint="#2A2A3A" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- æ¬éçæå¡ç -->
+        <!-- Ã¦Â¬ÂÃ©ÂÂÃ§ÂÂÃ¦ÂÂÃ¥ÂÂ¡Ã§ÂÂ -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,19 +99,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="æ¬éçæ"
+                    android:text="Ã¦Â¬ÂÃ©ÂÂÃ§ÂÂÃ¦ÂÂ"
                     android:textColor="#88AABB"
                     android:textSize="12sp"
                     android:textAllCaps="true"
                     android:letterSpacing="0.1"
                     android:layout_marginBottom="16dp" />
 
-                <!-- æ¸æµ®è¦çªæ¬é -->
+                <!-- Ã¦ÂÂ¸Ã¦ÂµÂ®Ã¨Â¦ÂÃ§ÂªÂÃ¦Â¬ÂÃ©ÂÂ -->
                 <TextView
                     android:id="@+id/tvOverlayStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="â æ¸æµ®è¦çªæ¬éï¼éè¦éå"
+                    android:text="Ã¢ÂÂ Ã¦ÂÂ¸Ã¦ÂµÂ®Ã¨Â¦ÂÃ§ÂªÂÃ¦Â¬ÂÃ©ÂÂÃ¯Â¼ÂÃ©ÂÂÃ¨Â¦ÂÃ©ÂÂÃ¥ÂÂ"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:layout_marginBottom="8dp" />
@@ -120,17 +120,17 @@
                     android:id="@+id/btnGrantOverlay"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:text="éåæ¸æµ®è¦çªæ¬é"
+                    android:text="Ã©ÂÂÃ¥ÂÂÃ¦ÂÂ¸Ã¦ÂµÂ®Ã¨Â¦ÂÃ§ÂªÂÃ¦Â¬ÂÃ©ÂÂ"
                     android:textSize="13sp"
                     android:backgroundTint="#B8860B"
                     android:layout_marginBottom="20dp" />
 
-                <!-- ç¡éç¤æå -->
+                <!-- Ã§ÂÂ¡Ã©ÂÂÃ§Â¤ÂÃ¦ÂÂÃ¥ÂÂ -->
                 <TextView
                     android:id="@+id/tvAccessibilityStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="â ç¡éç¤æåï¼éè¦éå"
+                    android:text="Ã¢ÂÂ Ã§ÂÂ¡Ã©ÂÂÃ§Â¤ÂÃ¦ÂÂÃ¥ÂÂÃ¯Â¼ÂÃ©ÂÂÃ¨Â¦ÂÃ©ÂÂÃ¥ÂÂ"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:layout_marginBottom="8dp" />
@@ -139,13 +139,13 @@
                     android:id="@+id/btnGrantAccessibility"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:text="éåç¡éç¤æå"
+                    android:text="Ã©ÂÂÃ¥ÂÂÃ§ÂÂ¡Ã©ÂÂÃ§Â¤ÂÃ¦ÂÂÃ¥ÂÂ"
                     android:textSize="13sp"
                     android:backgroundTint="#B8860B" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- çæ¬è³è¨ -->
+        <!-- Ã§ÂÂÃ¦ÂÂ¬Ã¨Â³ÂÃ¨Â¨Â -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -155,11 +155,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="32dp" />
 
-    </LinearLayout>
-</ScrollView>
-        <!-- ─────────────────────────────────────── -->
-        <!-- Phase 2: 伺服器設定                       -->
-        <!-- ─────────────────────────────────────── -->
+        <!-- Phase 2: 伺服器設定 -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -174,7 +170,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Phase 2 標題 -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -193,7 +188,6 @@
                     android:textSize="11sp"
                     android:layout_marginBottom="12dp" />
 
-                <!-- Server URL 輸入框 -->
                 <EditText
                     android:id="@+id/etServerUrl"
                     android:layout_width="match_parent"
@@ -204,15 +198,12 @@
                     android:textColorHint="#445566"
                     android:textSize="13sp"
                     android:fontFamily="monospace"
-                    android:background="@android:drawable/edit_text"
-                    android:backgroundTint="#1A3355"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:layout_marginBottom="12dp" />
 
-                <!-- 按鈕列 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -234,17 +225,16 @@
                         android:layout_width="0dp"
                         android:layout_height="44dp"
                         android:layout_weight="1"
-                        android:text="測試連線"
+                        android:text="測試連綫"
                         android:textSize="13sp"
                         android:backgroundTint="#1A3B6B" />
                 </LinearLayout>
 
-                <!-- 連線狀態 -->
                 <TextView
                     android:id="@+id/tvServerStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="● 離線模式（規則引擎）"
+                    android:text="● 離綫模式（規則引擎）"
                     android:textColor="#8899AA"
                     android:textSize="11sp"
                     android:fontFamily="monospace" />
@@ -252,4 +242,5 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-
+    </LinearLayout>
+</ScrollView>
