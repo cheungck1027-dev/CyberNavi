@@ -33,7 +33,24 @@ jobs:
       - name: 🔑 Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # ── 5. 緩存 Gradle 依賴（加速後續構建）─────────────
+      # ── 5. 修復 Gradle Wrapper JAR（重新下載以防損壞）──
+      - name: 🔧 Fix Gradle Wrapper JAR
+        run: |
+          GRADLE_VERSION=$(grep 'distributionUrl' gradle/wrapper/gradle-wrapper.properties \
+            | sed 's/.*gradle-\([0-9.]*\)-.*/\1/')
+          echo "Target Gradle version: ${GRADLE_VERSION}"
+          # Download directly from Gradle's GitHub releases
+          curl -sLo gradle/wrapper/gradle-wrapper.jar \
+            "https://github.com/gradle/gradle/raw/v${GRADLE_VERSION}/gradle/wrapper/gradle-wrapper.jar"
+          # Fallback: use known-good v8.7.0 wrapper if above fails
+          if [ ! -s gradle/wrapper/gradle-wrapper.jar ]; then
+            echo "Fallback: downloading v8.7.0 wrapper JAR"
+            curl -sLo gradle/wrapper/gradle-wrapper.jar \
+              "https://github.com/gradle/gradle/raw/v8.7.0/gradle/wrapper/gradle-wrapper.jar"
+          fi
+          echo "Wrapper JAR: $(wc -c < gradle/wrapper/gradle-wrapper.jar) bytes"
+
+      # ── 6. 緩存 Gradle 依賴（加速後續構建）─────────────
       - name: 💾 Cache Gradle packages
         uses: actions/cache@v4
         with:
@@ -44,13 +61,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # ── 6. 構建 Debug APK ────────────────────────────
+      # ── 7. 構建 Debug APK ────────────────────────────
       - name: 🔨 Build Debug APK
         run: ./gradlew assembleDebug --no-daemon
         env:
           ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
 
-      # ── 7. 上傳 APK Artifact ─────────────────────────
+      # ── 8. 上傳 APK Artifact ─────────────────────────
       - name: 📦 Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
@@ -58,7 +75,7 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
 
-      # ── 8. 顯示 APK 資訊 ─────────────────────────────
+      # ── 9. 顯示 APK 資訊 ─────────────────────────────
       - name: 📊 APK Info
         run: |
           APK_PATH="app/build/outputs/apk/debug/app-debug.apk"
