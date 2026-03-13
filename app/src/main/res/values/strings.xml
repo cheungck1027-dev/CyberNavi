@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CyberNavi 雷霆</string>
+    <string name="floating_service_label">雷霆 AI 懸浮視窗</string>
+    <string name="accessibility_service_label">雷霆 AI 感知服務</string>
+    <string name="accessibility_service_description">
+        讓雷霆 AI 領航員能夠讀取螢幕上的 AI 輸出內容，
+        並以廣東話口語重新向你解說。雷霆不會上傳任何
+        個人資料到外部服務器。
+    </string>
+</resources>

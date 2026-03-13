@@ -1,0 +1,17 @@
+# ══════════════════════════════════════════════
+# local.properties.template
+# 複製此文件為 local.properties 並填寫你的設定
+# !! 千萬不要把 local.properties 上傳 Git !!
+# ══════════════════════════════════════════════
+
+# Android SDK 路徑（Android Studio 自動生成）
+sdk.dir=C\:\\Users\\User\\AppData\\Local\\Android\\Sdk
+
+# Phase 2: LLM API Key（選填，留空則使用規則引擎）
+# OPENAI_API_KEY=sk-proj-xxxxxxxxxxxx
+
+# Phase 2: 家用伺服器地址（本地 WiFi IP）
+# HOME_SERVER_URL=http://192.168.1.100:8000
+
+# Phase 2: Tailscale VPN 地址（外出時用）
+# TAILSCALE_SERVER_URL=http://100.x.x.x:8000

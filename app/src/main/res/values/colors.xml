@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#0D1F33</color>
+    <color name="cyber_blue">#0078D4</color>
+    <color name="thunder_gold">#FFD700</color>
+    <color name="navy_dark">#0D1F33</color>
+    <color name="navy_mid">#1A3A5C</color>
+    <color name="cyber_glow">#00D4FF</color>
+</resources>
