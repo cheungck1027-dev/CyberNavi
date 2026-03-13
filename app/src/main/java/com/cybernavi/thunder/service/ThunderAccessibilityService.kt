@@ -13,6 +13,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import com.cybernavi.thunder.persona.ThunderPersona
 import kotlinx.coroutines.*
 
+import com.cybernavi.thunder.settings.SettingsStore
 /**
  * ThunderAccessibilityService â ç³»çµ± AI è¼¸åºæªç²æ¨¡çµ
  *
