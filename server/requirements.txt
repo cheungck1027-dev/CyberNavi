@@ -1,0 +1,22 @@
+# CyberNavi Phase 2 Home Server — Python Dependencies
+
+# API Framework
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+
+# Vector Memory
+chromadb==0.6.3
+sentence-transformers==3.3.1
+
+# LLM Integration (choose one or both)
+anthropic==0.43.0       # Claude 3.5 Sonnet (recommended)
+openai==1.59.6          # OpenAI GPT-4o / GPT-4o-mini
+
+# Utilities
+python-dotenv==1.0.1
+httpx==0.28.1
+rich==13.9.4
+
+# Optional: local LLM via Ollama
+# ollama==0.4.4
