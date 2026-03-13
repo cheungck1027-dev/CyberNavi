@@ -13,49 +13,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # ── 1. 獲取代碼 ─────────────────────────────────────
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
+      # ── 2. 設置 JDK 17 ───────────────────────────
       - name: ☕ Setup JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
+      # ── 3. 設置 Android SDK ────────────────────────
       - name: 🤖 Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      # ── 4. 賦予 gradlew 執行權限 ──────────────────────
       - name: 🔑 Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: 🔧 Fix Gradle Wrapper JAR
-        run: |
-          GRADLE_VERSION=$(grep 'distributionUrl' gradle/wrapper/gradle-wrapper.properties \
-            | sed 's/.*gradle-\([0-9.]*\)-.*/\1/')
-          echo "Target Gradle version: ${GRADLE_VERSION}"
-          curl -sLo gradle/wrapper/gradle-wrapper.jar \
-            "https://github.com/gradle/gradle/raw/v${GRADLE_VERSION}/gradle/wrapper/gradle-wrapper.jar"
-          if [ ! -s gradle/wrapper/gradle-wrapper.jar ]; then
-            echo "Fallback: downloading v8.7.0 wrapper JAR"
-            curl -sLo gradle/wrapper/gradle-wrapper.jar \
-              "https://github.com/gradle/gradle/raw/v8.7.0/gradle/wrapper/gradle-wrapper.jar"
-          fi
-          echo "Wrapper JAR: $(wc -c < gradle/wrapper/gradle-wrapper.jar) bytes"
+      # ── 5. 緩存 Gradle 依賴 ─────────────────────────────
+      - name: 💾 Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
-      - name: 🔨 Build Debug APK (direct Java, no -classpath flag)
-        run: |
-          # Use CLASSPATH env var so -classpath never appears in process args.
-          # Gradle 8.14.3 reads ProcessHandle args and misinterprets -classpath as -c lasspath.
-          export CLASSPATH="$(pwd)/gradle/wrapper/gradle-wrapper.jar"
-          "$JAVA_HOME/bin/java" \
-            -Xmx2g -Xms512m \
-            -Dorg.gradle.appname=gradlew \
-            -Dfile.encoding=UTF-8 \
-            org.gradle.wrapper.GradleWrapperMain \
-            assembleDebug --stacktrace
+      # ── 6. 構建 Debug APK ──────────────────────────────
+      - name: 🔨 Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace
         env:
           ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
 
+      # ── 7. 上傳 APK Artifact ───────────────────────────
       - name: 📦 Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
