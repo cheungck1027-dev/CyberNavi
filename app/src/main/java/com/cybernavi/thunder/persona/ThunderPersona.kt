@@ -1,37 +1,47 @@
 package com.cybernavi.thunder.persona
 
+import android.util.Log
+import com.cybernavi.thunder.network.ThunderServerClient
 import com.cybernavi.thunder.service.ThunderAccessibilityService.InterceptSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * ThunderPersona — 雷霆性格引擎 ⚡
+ * ThunderPersona — 雷電性格引擎 ⚡
  *
- * 核心功能：將任何冰冷的系統文字轉化為有血有肉的廣東話回應。
+ * 核心功能：將任何截獲的系統文字轉化為有情感的廣東話回應。
  *
- * Phase 1（當前）：
- *   - 規則引擎：基於模式匹配做廣東話轉換
- *   - 本地處理：完全離線，不需要 API
- *   - 快速反應：< 50ms 處理時間
- *
- * Phase 2（計劃）：
- *   - 接入 LLM API（OpenAI / Claude / 本地 Ollama）
- *   - 啟用 Memory 系統（查詢 ChromaDB）
- *   - 雷霆能引用歷史記憶
- *
- * 設計原則：
- *   - 稱用戶「兄弟」
- *   - 多用廣東話語尾助詞：喎、㗎、喇、呋、囉
- *   - 禁用書面語「了」「您」「諯問」
- *   - 有情緒溫度：興奮用「正！」，催促用「濫啲！」
+ * Phase 1（完成）：規則式引擎，完全離線
+ * Phase 2（啟用中）：若 serverUrl 已設定，優先呼叫家用 LLM 伺服器
+ *          伺服器失敗或未設定時，自動降級回 Phase 1 規則引擎
  */
 class ThunderPersona {
 
-    // ══════════════════════════════════════
-    // 主要轉譯入口
-    // ══════════════════════════════════════
+    private val TAG = "ThunderPersona"
+
+    // Phase 2: 家用伺服器 URL；留空 = 純本地規則模式
+    var serverUrl: String = ""
+
+    // ──────────────────────────────────────
+    // 主要翻譯入口
+    // ──────────────────────────────────────
 
     suspend fun translate(rawText: String, source: InterceptSource): String {
+        // ── Phase 2: 先嘗試家用 LLM 伺服器
+        if (serverUrl.isNotBlank()) {
+            try {
+                val client = ThunderServerClient(serverUrl)
+                val result = client.translate(rawText, source.name)
+                if (result != null && result.thunder_response.isNotBlank()) {
+                    Log.d(TAG, "Phase 2 伺服器回應: ${result.thunder_response.take(50)}")
+                    return result.thunder_response
+                }
+            } catch (e: Exception) {
+                Log.d(TAG, "伺服器不可用，降級到本地規則引擎: ${e.message}")
+            }
+        }
+
+        // ── Phase 1: 本地規則引擎
         return withContext(Dispatchers.Default) {
             when (source) {
                 InterceptSource.GALAXY_AI_SUMMARY -> translateSummary(rawText)
@@ -42,28 +52,24 @@ class ThunderPersona {
         }
     }
 
-    // ══════════════════════════════════════
-    // 場景轉譯規則
-    // ══════════════════════════════════════
-
     private fun translateSummary(text: String): String {
         val cleaned = cleanText(text)
         val shortened = if (cleaned.length > 100) cleaned.take(97) + "..." else cleaned
 
-        // 根據內容判斷情緒和語氣
+        // æ ¹æå§å®¹å¤æ·æç·åèªæ°£
         val emotion = detectEmotion(cleaned)
         val opener = listOf(
-            "兄弟，",
-            "喂，",
-            "留意呀兄弟，",
-            "我幫你睇咗，"
+            "åå¼ï¼",
+            "åï¼",
+            "çæååå¼ï¼",
+            "æå¹«ä½ çåï¼"
         ).random()
 
         val closer = when (emotion) {
-            Emotion.IMPORTANT  -> "呢個幾重要㗎，留意下！"
-            Emotion.EXCITING   -> "正！值得睇多兩眼㗎！"
-            Emotion.WARNING    -> "小心呀！有啲嘢要注意。"
-            Emotion.NEUTRAL    -> pickRandom("知咗未？", "係噉㗎喇。", "留個心喇。")
+            Emotion.IMPORTANT  -> "å¢åå¹¾éè¦ãï¼çæä¸ï¼"
+            Emotion.EXCITING   -> "æ­£ï¼å¼å¾çå¤å©ç¼ãï¼"
+            Emotion.WARNING    -> "å°å¿åï¼æå²å¢è¦æ³¨æã"
+            Emotion.NEUTRAL    -> pickRandom("ç¥åæªï¼", "ä¿åãåã", "çåå¿åã")
         }
 
         val converted = convertToCantonese(shortened)
@@ -71,129 +77,129 @@ class ThunderPersona {
     }
 
     private fun translateResult(text: String): String {
-        // 翻譯結果：簡短直接，確認用戶需要
+        // ç¿»è­¯çµæï¼ç°¡ç­ç´æ¥ï¼ç¢ºèªç¨æ¶éè¦
         val converted = convertToCantonese(cleanText(text))
         val starters = listOf(
-            "係噉翻譯㗎：",
-            "幫你搞定咗：",
-            "即係噉講："
+            "ä¿åç¿»è­¯ãï¼",
+            "å¹«ä½ æå®åï¼",
+            "å³ä¿åè¬ï¼"
         )
-        return "${starters.random()} 「$converted」 —— 你用到喎？"
+        return "${starters.random()} ã$convertedã ââ ä½ ç¨å°åï¼"
     }
 
     private fun translateNotification(text: String): String {
         val cleaned = cleanText(text)
 
-        // 偵測發件人/應用
+        // åµæ¸¬ç¼ä»¶äºº/æç¨
         val isUrgent = detectUrgency(cleaned)
-        val opener = if (isUrgent) "喂喂喂！" else "兄弟，"
+        val opener = if (isUrgent) "åååï¼" else "åå¼ï¼"
         val converted = convertToCantonese(cleaned)
 
         return if (isUrgent) {
-            "${opener}有急嘢喎！$converted 快啲處理吓！"
+            "${opener}ææ¥å¢åï¼$converted å¿«å²èçåï¼"
         } else {
-            "${opener}有訊息㗎：$converted"
+            "${opener}æè¨æ¯ãï¼$converted"
         }
     }
 
     private fun translateGeneral(text: String): String {
         val converted = convertToCantonese(cleanText(text))
-        return "兄弟，睇到呢個：$converted"
+        return "åå¼ï¼çå°å¢åï¼$converted"
     }
 
-    // ══════════════════════════════════════
-    // 廣東話轉換規則引擎
-    // ══════════════════════════════════════
+    // ââââââââââââââââââââââââââââââââââââââ
+    // å»£æ±è©±è½æè¦åå¼æ
+    // ââââââââââââââââââââââââââââââââââââââ
 
     /**
-     * 核心書面語 → 廣東話口語轉換
-     * 這係雷霆性格最核心的規則庫
+     * æ ¸å¿æ¸é¢èª â å»£æ±è©±å£èªè½æ
+     * éä¿é·éæ§æ ¼ææ ¸å¿çè¦ååº«
      */
     private fun convertToCantonese(text: String): String {
         var result = text
 
-        // ── 稱謂轉換 ──
+        // ââ ç¨±è¬è½æ ââ
         result = result
-            .replace("您", "你")
-            .replace("閣下", "你")
+            .replace("æ¨", "ä½ ")
+            .replace("é£ä¸", "ä½ ")
 
-        // ── 書面語 → 口語 ──
+        // ââ æ¸é¢èª â å£èª ââ
         result = result
-            .replace("是的", "係㗎")
-            .replace("是", "係")
-            .replace("不是", "唔係")
-            .replace("不", "唔")
-            .replace("沒有", "冇")
-            .replace("沒", "冇")
-            .replace("什麼", "咩")
-            .replace("為什麼", "點解")
-            .replace("怎麼", "點")
-            .replace("怎樣", "點樣")
-            .replace("這個", "呢個")
-            .replace("那個", "嗰個")
-            .replace("這裡", "呢度")
-            .replace("那裡", "嗰度")
-            .replace("這樣", "噉")
-            .replace("這麼", "咁")
-            .replace("現在", "依家")
-            .replace("以後", "之後")
-            .replace("很多", "好多")
-            .replace("非常", "好")
-            .replace("可以", "得")
-            .replace("不可以", "唔得")
-            .replace("知道", "知")
-            .replace("告訴", "話俾")
-            .replace("說", "話")
-            .replace("說話", "講嘢")
-            .replace("講話", "講嘢")
-            .replace("吃", "食")
-            .replace("喝", "飲")
-            .replace("走", "行")
-            .replace("看", "睇")
-            .replace("看到", "睇到")
-            .replace("聽到", "聽到")
-            .replace("做了", "做咗")
-            .replace("去了", "去咗")
-            .replace("來了", "嚟咗")
-            .replace("好了", "好喇")
-            .replace("完了", "完咗")
+            .replace("æ¯ç", "ä¿ã")
+            .replace("æ¯", "ä¿")
+            .replace("ä¸æ¯", "åä¿")
+            .replace("ä¸", "å")
+            .replace("æ²æ", "å")
+            .replace("æ²", "å")
+            .replace("ä»éº¼", "å©")
+            .replace("çºä»éº¼", "é»è§£")
+            .replace("æéº¼", "é»")
+            .replace("ææ¨£", "é»æ¨£")
+            .replace("éå", "å¢å")
+            .replace("é£å", "å°å")
+            .replace("éè£¡", "å¢åº¦")
+            .replace("é£è£¡", "å°åº¦")
+            .replace("éæ¨£", "å")
+            .replace("ééº¼", "å")
+            .replace("ç¾å¨", "ä¾å®¶")
+            .replace("ä»¥å¾", "ä¹å¾")
+            .replace("å¾å¤", "å¥½å¤")
+            .replace("éå¸¸", "å¥½")
+            .replace("å¯ä»¥", "å¾")
+            .replace("ä¸å¯ä»¥", "åå¾")
+            .replace("ç¥é", "ç¥")
+            .replace("åè¨´", "è©±ä¿¾")
+            .replace("èªª", "è©±")
+            .replace("èªªè©±", "è¬å¢")
+            .replace("è¬è©±", "è¬å¢")
+            .replace("å", "é£")
+            .replace("å", "é£²")
+            .replace("èµ°", "è¡")
+            .replace("ç", "ç")
+            .replace("çå°", "çå°")
+            .replace("è½å°", "è½å°")
+            .replace("åäº", "åå")
+            .replace("å»äº", "å»å")
+            .replace("ä¾äº", "åå")
+            .replace("å¥½äº", "å¥½å")
+            .replace("å®äº", "å®å")
 
-        // ── 語尾轉換 ──
+        // ââ èªå°¾è½æ ââ
         result = result
-            .replace("了。", "喇。")
-            .replace("了！", "喇！")
-            .replace("了，", "喇，")
-            .replace("了", "咗")
-            .replace("嗎？", "㗎？")
-            .replace("吧。", "囉。")
-            .replace("吧！", "囉！")
-            .replace("吧，", "囉，")
-            .replace("呢。", "㗎。")
-            .replace("呢！", "㗎！")
-            .replace("啊。", "呀。")
-            .replace("啊！", "呀！")
+            .replace("äºã", "åã")
+            .replace("äºï¼", "åï¼")
+            .replace("äºï¼", "åï¼")
+            .replace("äº", "å")
+            .replace("åï¼", "ãï¼")
+            .replace("å§ã", "åã")
+            .replace("å§ï¼", "åï¼")
+            .replace("å§ï¼", "åï¼")
+            .replace("å¢ã", "ãã")
+            .replace("å¢ï¼", "ãï¼")
+            .replace("åã", "åã")
+            .replace("åï¼", "åï¼")
 
         return result
     }
 
-    // ══════════════════════════════════════
-    // 輔助工具方法
-    // ══════════════════════════════════════
+    // ââââââââââââââââââââââââââââââââââââââ
+    // è¼å©å·¥å·æ¹æ³
+    // ââââââââââââââââââââââââââââââââââââââ
 
     private fun cleanText(text: String): String {
         return text
             .replace(Regex("\\s+"), " ")
-            .replace(Regex("[\\n\\r]+"), "。")
+            .replace(Regex("[\\n\\r]+"), "ã")
             .trim()
-            .take(200)  // 截斷過長文字
+            .take(200)  // æªæ·éé·æå­
     }
 
     private enum class Emotion { IMPORTANT, EXCITING, WARNING, NEUTRAL }
 
     private fun detectEmotion(text: String): Emotion {
-        val importantKeywords = listOf("重要", "緊急", "截止", "注意", "警告", "危險", "錯誤")
-        val excitingKeywords  = listOf("優惠", "折扣", "成功", "完成", "達成", "好消息", "機票", "促銷")
-        val warningKeywords   = listOf("失敗", "錯誤", "問題", "無法", "拒絕", "取消")
+        val importantKeywords = listOf("éè¦", "ç·æ¥", "æªæ­¢", "æ³¨æ", "è­¦å", "å±éª", "é¯èª¤")
+        val excitingKeywords  = listOf("åªæ ", "ææ£", "æå", "å®æ", "éæ", "å¥½æ¶æ¯", "æ©ç¥¨", "ä¿é·")
+        val warningKeywords   = listOf("å¤±æ", "é¯èª¤", "åé¡", "ç¡æ³", "æçµ", "åæ¶")
 
         return when {
             importantKeywords.any { text.contains(it) } -> Emotion.IMPORTANT
@@ -204,31 +210,31 @@ class ThunderPersona {
     }
 
     private fun detectUrgency(text: String): Boolean {
-        val urgentKeywords = listOf("緊急", "urgent", "ASAP", "火速", "即刻", "立即", "快")
+        val urgentKeywords = listOf("ç·æ¥", "urgent", "ASAP", "ç«é", "å³å»", "ç«å³", "å¿«")
         return urgentKeywords.any { text.contains(it, ignoreCase = true) }
     }
 
     private fun pickRandom(vararg options: String): String = options.random()
 
-    // ══════════════════════════════════════
-    // Phase 2 預留：LLM API 接口
-    // ══════════════════════════════════════
+    // ââââââââââââââââââââââââââââââââââââââ
+    // Phase 2 é çï¼LLM API æ¥å£
+    // ââââââââââââââââââââââââââââââââââââââ
 
     /**
-     * TODO Phase 2: 接入 LLM API
+     * TODO Phase 2: æ¥å¥ LLM API
      *
-     * 替換上面的規則引擎，改用以下 System Prompt 呼叫 LLM：
+     * æ¿æä¸é¢çè¦åå¼æï¼æ¹ç¨ä»¥ä¸ System Prompt å¼å« LLMï¼
      *
      * System Prompt:
      * """
-     * 你係「雷霆」，一個香港男生 AI 助手，性格熱血、講廣東話口語。
-     * 規則：
-     * 1. 稱用戶「兄弟」，自稱「我」
-     * 2. 多用廣東話語尾：喎、㗎、喇、咋、囉
-     * 3. 禁用書面語「了」「您」「請問有何吩咐」
-     * 4. 有情緒：興奮用「正！」，催促用「快啲！」
-     * 5. 回覆控制在 2-3 句話以內
-     * 6. 如有相關記憶，自然地提及（例：「上次你話...」）
+     * ä½ ä¿ãé·éãï¼ä¸åé¦æ¸¯ç·ç AI å©æï¼æ§æ ¼ç±è¡ãè¬å»£æ±è©±å£èªã
+     * è¦åï¼
+     * 1. ç¨±ç¨æ¶ãåå¼ãï¼èªç¨±ãæã
+     * 2. å¤ç¨å»£æ±è©±èªå°¾ï¼åãããåãåãå
+     * 3. ç¦ç¨æ¸é¢èªãäºããæ¨ããè«åæä½å©åã
+     * 4. ææç·ï¼èå¥®ç¨ãæ­£ï¼ãï¼å¬ä¿ç¨ãå¿«å²ï¼ã
+     * 5. åè¦æ§å¶å¨ 2-3 å¥è©±ä»¥å§
+     * 6. å¦æç¸éè¨æ¶ï¼èªç¶å°æåï¼ä¾ï¼ãä¸æ¬¡ä½ è©±...ãï¼
      * """
      *
      * suspend fun translateWithLLM(text: String, source: InterceptSource): String {
