@@ -13,11 +13,11 @@
         android:padding="24dp"
         android:gravity="center_horizontal">
 
-        <!-- 標題 -->
+        <!-- æ¨é¡ -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⚡ PROJECT CYBER-NAVI"
+            android:text="â¡ PROJECT CYBER-NAVI"
             android:textColor="#00D4FF"
             android:textSize="22sp"
             android:textStyle="bold"
@@ -28,12 +28,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="雷霆 AI 領航員"
+            android:text="é·é AI é èªå¡"
             android:textColor="#88AABB"
             android:textSize="14sp"
             android:layout_marginBottom="32dp" />
 
-        <!-- 整體狀態卡片 -->
+        <!-- æ´é«çæå¡ç -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                     android:id="@+id/tvStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="檢查中..."
+                    android:text="æª¢æ¥ä¸­..."
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -64,7 +64,7 @@
                     android:id="@+id/btnStartThunder"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:text="⚡ 啟動雷霆"
+                    android:text="â¡ ååé·é"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:backgroundTint="#0078D4"
@@ -74,14 +74,14 @@
                     android:id="@+id/btnStopThunder"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="💤 讓雷霆休眠"
+                    android:text="ð¤ è®é·éä¼ç "
                     android:textColor="#CCCCCC"
                     android:textSize="14sp"
                     android:backgroundTint="#2A2A3A" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- 權限狀態卡片 -->
+        <!-- æ¬éçæå¡ç -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,19 +99,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="權限狀態"
+                    android:text="æ¬éçæ"
                     android:textColor="#88AABB"
                     android:textSize="12sp"
                     android:textAllCaps="true"
                     android:letterSpacing="0.1"
                     android:layout_marginBottom="16dp" />
 
-                <!-- 懸浮視窗權限 -->
+                <!-- æ¸æµ®è¦çªæ¬é -->
                 <TextView
                     android:id="@+id/tvOverlayStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="❌ 懸浮視窗權限：需要開啟"
+                    android:text="â æ¸æµ®è¦çªæ¬éï¼éè¦éå"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:layout_marginBottom="8dp" />
@@ -120,17 +120,17 @@
                     android:id="@+id/btnGrantOverlay"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:text="開啟懸浮視窗權限"
+                    android:text="éåæ¸æµ®è¦çªæ¬é"
                     android:textSize="13sp"
                     android:backgroundTint="#B8860B"
                     android:layout_marginBottom="20dp" />
 
-                <!-- 無障礙服務 -->
+                <!-- ç¡éç¤æå -->
                 <TextView
                     android:id="@+id/tvAccessibilityStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="❌ 無障礙服務：需要開啟"
+                    android:text="â ç¡éç¤æåï¼éè¦éå"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:layout_marginBottom="8dp" />
@@ -139,17 +139,17 @@
                     android:id="@+id/btnGrantAccessibility"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
-                    android:text="開啟無障礙服務"
+                    android:text="éåç¡éç¤æå"
                     android:textSize="13sp"
                     android:backgroundTint="#B8860B" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- 版本資訊 -->
+        <!-- çæ¬è³è¨ -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="v0.1.0-alpha  |  Phase 1 Build"
+            android:text="v0.1.0-alpha  |  Phase 1+2 Ready"
             android:textColor="#446688"
             android:textSize="11sp"
             android:layout_marginTop="16dp"
@@ -157,3 +157,99 @@
 
     </LinearLayout>
 </ScrollView>
+        <!-- ─────────────────────────────────────── -->
+        <!-- Phase 2: 伺服器設定                       -->
+        <!-- ─────────────────────────────────────── -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="#0A1628"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Phase 2 標題 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚡ Phase 2: 伺服器設定"
+                    android:textColor="#FFD700"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:fontFamily="monospace"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="設定家用 LLM 伺服器 URL（留空 = 純本地規則模式）"
+                    android:textColor="#8899AA"
+                    android:textSize="11sp"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Server URL 輸入框 -->
+                <EditText
+                    android:id="@+id/etServerUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="http://192.168.x.x:8765"
+                    android:inputType="textUri"
+                    android:textColor="#E0E8F0"
+                    android:textColorHint="#445566"
+                    android:textSize="13sp"
+                    android:fontFamily="monospace"
+                    android:background="@android:drawable/edit_text"
+                    android:backgroundTint="#1A3355"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- 按鈕列 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <Button
+                        android:id="@+id/btnSaveServerUrl"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="儲存"
+                        android:textSize="13sp"
+                        android:backgroundTint="#1A6B3C"
+                        android:layout_marginEnd="8dp" />
+
+                    <Button
+                        android:id="@+id/btnTestConnection"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="測試連線"
+                        android:textSize="13sp"
+                        android:backgroundTint="#1A3B6B" />
+                </LinearLayout>
+
+                <!-- 連線狀態 -->
+                <TextView
+                    android:id="@+id/tvServerStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="● 離線模式（規則引擎）"
+                    android:textColor="#8899AA"
+                    android:textSize="11sp"
+                    android:fontFamily="monospace" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
