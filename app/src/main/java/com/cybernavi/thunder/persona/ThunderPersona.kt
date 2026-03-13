@@ -84,7 +84,7 @@ class ThunderPersona {
             "å¹«ä½ æå®åï¼",
             "å³ä¿åè¬ï¼"
         )
-        return "${starters.random()} ã$convertedã ââ ä½ ç¨å°åï¼"
+        return "${starters.random()} ã${converted}ã ââ ä½ ç¨å°åï¼"
     }
 
     private fun translateNotification(text: String): String {
